@@ -1,4 +1,4 @@
-package com.projeto.authentication_api.services.impl;
+package com.projeto.authentication_api.services;
 
 import com.projeto.authentication_api.exceptions.AuthenticationException;
 import org.springframework.stereotype.Service;
@@ -7,7 +7,7 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-public class CaptchaServiceImpl {
+public class CaptchaService {
     private final ConcurrentHashMap<String, String> captchaStore = new ConcurrentHashMap<>();
 
     public String generateOrGetCaptcha(String username) {

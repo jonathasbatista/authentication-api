@@ -1,4 +1,4 @@
-package com.projeto.authentication_api.services.impl;
+package com.projeto.authentication_api.services;
 
 import com.projeto.authentication_api.exceptions.AuthenticationException;
 import jakarta.mail.internet.MimeMessage;
@@ -7,10 +7,10 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmailServiceImpl {
+public class EmailService {
     private final JavaMailSender mailSender;
 
-    public EmailServiceImpl(JavaMailSender mailSender) {
+    public EmailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
 

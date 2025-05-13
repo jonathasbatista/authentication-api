@@ -1,8 +1,10 @@
-package com.projeto.authentication_api.services.impl;
+package com.projeto.authentication_api.services;
 
+import com.projeto.authentication_api.dtos.LoginDto;
 import com.projeto.authentication_api.exceptions.AuthenticationException;
 import com.projeto.authentication_api.models.UserModel;
 import com.projeto.authentication_api.repositories.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
@@ -11,13 +13,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import static com.projeto.authentication_api.utils.PasswordUtil.hashPassword;
 
 @Service
-public class LoginServiceImpl {
+public class LoginService {
     private final UserRepository userRepository;
-    private final EmailServiceImpl emailService;
+    private final EmailService emailService;
     private final ConcurrentHashMap<String, Integer> loginAttempts = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, String> verificationCodes = new ConcurrentHashMap<>();
 
-    public LoginServiceImpl(UserRepository userRepository, EmailServiceImpl emailService) {
+    public LoginService(UserRepository userRepository, EmailService emailService) {
         this.userRepository = userRepository;
         this.emailService = emailService;
     }
@@ -63,6 +65,21 @@ public class LoginServiceImpl {
 
     public void clearAttempts(String username) {
         loginAttempts.remove(username);
+    }
+
+    public String login(LoginDto loginDto, HttpServletRequest request) {
+        String username = loginDto.username();
+        if (getAttempts(username) >= 5) {
+            throw new AuthenticationException("Número máximo de tentativas excedido. Tente novamente mais tarde.");
+        }
+
+        UserModel user = validateUserAndPassword(username, loginDto.password());
+        String clientIp = request.getRemoteAddr();
+        validateIp(user, clientIp);
+        handle2FA(username, user.getEmail(), loginDto.code());
+        clearAttempts(username);
+
+        return "Login bem-sucedido!";
     }
 }
 

@@ -10,14 +10,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RegisterServiceImpl {
+public class RegisterService {
 
-    private static final Logger logger = LoggerFactory.getLogger(RegisterServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(RegisterService.class);
     private static final String EMAIL_REGEX = "^[\\w-.]+@[\\w-]+\\.[a-zA-Z]{2,}$";
 
     private final UserRepository userRepository;
 
-    public RegisterServiceImpl(UserRepository userRepository) {
+    public RegisterService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
