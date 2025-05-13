@@ -1,35 +1,35 @@
 package com.projeto.authentication_api.controllers;
 
+import com.projeto.authentication_api.dtos.LoginDto;
 import com.projeto.authentication_api.dtos.UserDto;
 import com.projeto.authentication_api.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
-//Responsável por receber requisições HTTP, processar e devolver uma resposta
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private final UserService userService;
 
-    @PostMapping
-    private UserDto save(@RequestBody UserDto userDto){
-        return userService.save(userDto);
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
-    @GetMapping("/{username}")
-    public UserDto getByUsername(@PathVariable String username) {
-        return userService.getByUsername(username);
+    @PostMapping("/register")
+    public UserDto register(@RequestBody UserDto userDto) {
+        logger.info("Requisição para registrar usuário: {}", userDto.username());
+        return userService.register(userDto);
     }
 
-    @PutMapping("/{username}")
-    private UserDto update(@PathVariable String username, @RequestBody UserDto userDto) {
-        return userService.update(username, userDto);
-    }
-
-    @DeleteMapping("/{username}")
-    private void delete(@PathVariable String username) {
-        userService.delete(username);
+    @PostMapping("/login")
+    public String login(@RequestBody LoginDto loginDto, HttpServletRequest request) {
+        logger.info("Tentativa de login para o usuário: {}", loginDto.username());
+        return userService.login(loginDto, request);
     }
 }
+
+

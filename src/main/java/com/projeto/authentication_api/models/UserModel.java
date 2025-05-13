@@ -1,9 +1,7 @@
 package com.projeto.authentication_api.models;
 
 import jakarta.persistence.*;
-import com.projeto.authentication_api.enums.ProfileEnum;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -22,28 +20,19 @@ public class UserModel implements UserDetails {
     private String password;
     private String name;
     private String email;
-    @Enumerated(EnumType.STRING)
-    private ProfileEnum profile;
-    private String IPAuthorized;
+    private String profile;
+    private String ipAuthorized;
 
     public UserModel(){
     }
 
-    public UserModel(String username, String password, String name, String email, ProfileEnum profile) {
+    public UserModel(String username, String password, String name, String email, String profile, String ipAuthorized) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.email = email;
         this.profile = profile;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (this.profile == ProfileEnum.ADMIN) {
-            return List.of(new SimpleGrantedAuthority("PROFILE_ADMIN"));
-        } else {
-            return List.of(new SimpleGrantedAuthority("PROFILE_USER"));
-        }
+        this.ipAuthorized = ipAuthorized;
     }
 
     @Override
@@ -82,6 +71,11 @@ public class UserModel implements UserDetails {
         this.username = username;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
     public String getPassword() {
         return password;
     }
@@ -106,19 +100,19 @@ public class UserModel implements UserDetails {
         this.email = email;
     }
 
-    public ProfileEnum getProfile() {
+    public String getProfile() {
         return profile;
     }
 
-    public void setProfile(ProfileEnum profile) {
+    public void setProfile(String profile) {
         this.profile = profile;
     }
 
-    public String getIPAuthorized() {
-        return IPAuthorized;
+    public String getIpAuthorized() {
+        return ipAuthorized;
     }
 
-    public void setIPAuthorized(String IPAuthorized) {
-        this.IPAuthorized = IPAuthorized;
+    public void setIpAuthorized(String ipAuthorized) {
+        this.ipAuthorized = ipAuthorized;
     }
 }
