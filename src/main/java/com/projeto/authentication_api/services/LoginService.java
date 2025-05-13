@@ -5,6 +5,8 @@ import com.projeto.authentication_api.exceptions.AuthenticationException;
 import com.projeto.authentication_api.models.UserModel;
 import com.projeto.authentication_api.repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
@@ -16,12 +18,14 @@ import static com.projeto.authentication_api.utils.PasswordUtil.hashPassword;
 public class LoginService {
     private final UserRepository userRepository;
     private final EmailService emailService;
+    private final CaptchaService captchaService;
     private final ConcurrentHashMap<String, Integer> loginAttempts = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, String> verificationCodes = new ConcurrentHashMap<>();
 
-    public LoginService(UserRepository userRepository, EmailService emailService) {
+    public LoginService(UserRepository userRepository, EmailService emailService, CaptchaService captchaService) {
         this.userRepository = userRepository;
         this.emailService = emailService;
+        this.captchaService = captchaService;
     }
 
     public UserModel validateUserAndPassword(String username, String password) {
@@ -39,20 +43,21 @@ public class LoginService {
         }
     }
 
-    public void handle2FA(String username, String email, String inputCode) {
+    public ResponseEntity<String> handle2FA(String username, String email, String inputCode) {
         if (!verificationCodes.containsKey(username)) {
             String code = String.format("%06d", new Random().nextInt(999999));
             verificationCodes.put(username, code);
             emailService.sendVerificationCode(email, code);
-            throw new AuthenticationException("Código de verificação enviado para o e-mail");
+            return ResponseEntity.ok("Código de verificação enviado para o e-mail");
         }
 
         if (inputCode == null || !inputCode.equals(verificationCodes.get(username))) {
-            throw new AuthenticationException("Código de verificação inválido");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Código inválido ou expirado");
         }
 
         verificationCodes.remove(username);
         loginAttempts.remove(username);
+        return ResponseEntity.ok("Autenticação de dois fatores concluída com sucesso");
     }
 
     public void incrementAttempts(String username) {
@@ -69,17 +74,26 @@ public class LoginService {
 
     public String login(LoginDto loginDto, HttpServletRequest request) {
         String username = loginDto.username();
-        if (getAttempts(username) >= 5) {
-            throw new AuthenticationException("Número máximo de tentativas excedido. Tente novamente mais tarde.");
+        int attempts = getAttempts(username);
+
+        if (attempts >= 2) {
+            captchaService.generateOrGetCaptcha(username);
+            captchaService.validateCaptcha(username, loginDto.captcha());
         }
 
         UserModel user = validateUserAndPassword(username, loginDto.password());
-        String clientIp = request.getRemoteAddr();
-        validateIp(user, clientIp);
-        handle2FA(username, user.getEmail(), loginDto.code());
-        clearAttempts(username);
+        validateIp(user, request.getRemoteAddr());
 
-        return "Login bem-sucedido!";
+        ResponseEntity<String> twoFaResponse = handle2FA(username, user.getEmail(), loginDto.code());
+
+        if (twoFaResponse.getStatusCode() == HttpStatus.OK) {
+            return twoFaResponse.getBody();
+        }
+
+        clearAttempts(username);
+        captchaService.clearCaptcha(username);
+
+        return "Login realizado com sucesso";
     }
 }
 

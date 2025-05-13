@@ -21,8 +21,9 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody UserDto userDto) {
-        UserDto created = registerService.register(userDto);
+    public ResponseEntity<?> register(@RequestBody UserDto userDto, HttpServletRequest request) {
+        String ip = request.getRemoteAddr();
+        UserDto created = registerService.register(userDto, ip);
         return ResponseEntity.ok(created);
     }
 

@@ -21,8 +21,7 @@ public class RegisterService {
         this.userRepository = userRepository;
     }
 
-    public UserDto register(UserDto dto) {
-        logger.info("Requisição para cadastrar novo usuário: {}", dto.username());
+    public UserDto register(UserDto dto, String ip) {
 
         String username = dto.username().trim();
         String email = dto.email().trim();
@@ -39,10 +38,9 @@ public class RegisterService {
 
         String passwordHash = PasswordUtil.hashPassword(dto.password().trim());
 
-        UserModel user = new UserModel(username, passwordHash, dto.name().trim(), email, dto.profile().trim(), dto.ipAuthorized());
+        UserModel user = new UserModel(username, passwordHash, dto.name().trim(), email, dto.profile().trim(), ip);
 
         UserModel saved = userRepository.save(user);
-        logger.info("Usuário {} cadastrado com sucesso", saved.getUsername());
 
         return new UserDto(saved.getUsername(), null, saved.getName(), saved.getEmail(), saved.getProfile(), saved.getIpAuthorized());
     }

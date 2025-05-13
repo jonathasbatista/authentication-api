@@ -11,7 +11,8 @@ public class CaptchaService {
     private final ConcurrentHashMap<String, String> captchaStore = new ConcurrentHashMap<>();
 
     public String generateOrGetCaptcha(String username) {
-        return captchaStore.computeIfAbsent(username, k -> String.format("%06d", new Random().nextInt(999999)));
+        String captcha = captchaStore.computeIfAbsent(username, k -> String.format("%06d", new Random().nextInt(999999)));
+        return captcha;
     }
 
     public void validateCaptcha(String username, String input) {
