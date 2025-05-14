@@ -5,15 +5,11 @@ import com.projeto.authentication_api.exceptions.ValidationException;
 import com.projeto.authentication_api.models.UserModel;
 import com.projeto.authentication_api.repositories.UserRepository;
 import com.projeto.authentication_api.utils.PasswordUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.projeto.authentication_api.utils.SanitizerUtil;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RegisterService {
-
-    private static final Logger logger = LoggerFactory.getLogger(RegisterService.class);
-    private static final String EMAIL_REGEX = "^[\\w-.]+@[\\w-]+\\.[a-zA-Z]{2,}$";
 
     private final UserRepository userRepository;
 
@@ -23,22 +19,21 @@ public class RegisterService {
 
     public UserDto register(UserDto dto, String ip) {
 
-        String username = dto.username().trim();
-        String email = dto.email().trim();
+        String username = SanitizerUtil.sanitizeUsername(dto.username());
+        String password = SanitizerUtil.sanitizePassword(dto.password());
+        String name = SanitizerUtil.sanitizeName(dto.name());
+        String email = SanitizerUtil.sanitizeEmail(dto.email());
+        String profile = SanitizerUtil.sanitizeProfile(dto.profile());
 
         if (userRepository.findByUsername(username) != null) {
             throw new ValidationException("Usuário já existe.");
-        }
-        if (userRepository.findByEmail(email) != null) {
+        } else if (userRepository.findByEmail(email) != null) {
             throw new ValidationException("Email já está vinculado a outra conta.");
-        }
-        if (!email.matches(EMAIL_REGEX)) {
-            throw new ValidationException("Email inválido.");
         }
 
         String passwordHash = PasswordUtil.hashPassword(dto.password().trim());
 
-        UserModel user = new UserModel(username, passwordHash, dto.name().trim(), email, dto.profile().trim(), ip);
+        UserModel user = new UserModel(username, passwordHash, name, email, profile, ip);
 
         UserModel saved = userRepository.save(user);
 

@@ -2,11 +2,11 @@ package com.projeto.authentication_api.services;
 
 import com.projeto.authentication_api.dtos.LoginDto;
 import com.projeto.authentication_api.exceptions.AuthenticationException;
+import com.projeto.authentication_api.exceptions.ValidationException;
 import com.projeto.authentication_api.models.UserModel;
 import com.projeto.authentication_api.repositories.UserRepository;
+import com.projeto.authentication_api.utils.SanitizerUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
@@ -28,72 +28,69 @@ public class LoginService {
         this.captchaService = captchaService;
     }
 
-    public UserModel validateUserAndPassword(String username, String password) {
+    public String login(LoginDto loginDto, HttpServletRequest request) {
+        String username = SanitizerUtil.sanitizeUsername(loginDto.username());
+        String password = SanitizerUtil.sanitizePassword(loginDto.password());
+        String code = SanitizerUtil.sanitizeCode(loginDto.code());
+        String captcha = SanitizerUtil.sanitizeCaptcha(loginDto.captcha());
+
+        if (username == null || password == null) {
+            throw new ValidationException("Usuário e senha são obrigatórios.");
+        }
+
+        if (getAttempts(username) >= 2) {
+            captchaService.generateOrGetCaptcha(username);
+            captchaService.validateCaptcha(username, captcha);
+        }
+
+        UserModel user = validateUserAndPassword(username, password);
+        validateIp(user, request.getRemoteAddr());
+        handle2FA(username, user.getEmail(), code);
+
+        clearAttempts(username);
+        captchaService.clearCaptcha(username);
+        return "\nLogin realizado com sucesso";
+    }
+
+    private UserModel validateUserAndPassword(String username, String password) {
         UserModel user = userRepository.findByUsername(username);
         if (user == null || !hashPassword(password).equals(user.getPassword())) {
             incrementAttempts(username);
-            throw new AuthenticationException("Usuário ou senha inválidos");
+            throw new AuthenticationException("Usuário ou senha inválidos.");
         }
         return user;
     }
 
-    public void validateIp(UserModel user, String ip) {
+    private void validateIp(UserModel user, String ip) {
         if (!ip.equals(user.getIpAuthorized())) {
-            throw new AuthenticationException("IP não autorizado");
+            throw new AuthenticationException("IP não autorizado.");
         }
     }
 
-    public ResponseEntity<String> handle2FA(String username, String email, String inputCode) {
+    private String handle2FA(String username, String email, String inputCode) {
         if (!verificationCodes.containsKey(username)) {
             String code = String.format("%06d", new Random().nextInt(999999));
             verificationCodes.put(username, code);
             emailService.sendVerificationCode(email, code);
-            return ResponseEntity.ok("Código de verificação enviado para o e-mail");
+            return "Código de verificação enviado para o e-mail.";
         }
 
         if (inputCode == null || !inputCode.equals(verificationCodes.get(username))) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Código inválido ou expirado");
+            throw new AuthenticationException("Código de verificação inválido ou expirado.");
         }
-
         verificationCodes.remove(username);
-        loginAttempts.remove(username);
-        return ResponseEntity.ok("Autenticação de dois fatores concluída com sucesso");
+        return "Código válidado";
     }
 
-    public void incrementAttempts(String username) {
+    private void incrementAttempts(String username) {
         loginAttempts.merge(username, 1, Integer::sum);
     }
 
-    public int getAttempts(String username) {
+    private int getAttempts(String username) {
         return loginAttempts.getOrDefault(username, 0);
     }
 
-    public void clearAttempts(String username) {
+    private void clearAttempts(String username) {
         loginAttempts.remove(username);
     }
-
-    public String login(LoginDto loginDto, HttpServletRequest request) {
-        String username = loginDto.username();
-        int attempts = getAttempts(username);
-
-        if (attempts >= 2) {
-            captchaService.generateOrGetCaptcha(username);
-            captchaService.validateCaptcha(username, loginDto.captcha());
-        }
-
-        UserModel user = validateUserAndPassword(username, loginDto.password());
-        validateIp(user, request.getRemoteAddr());
-
-        ResponseEntity<String> twoFaResponse = handle2FA(username, user.getEmail(), loginDto.code());
-
-        if (twoFaResponse.getStatusCode() == HttpStatus.OK) {
-            return twoFaResponse.getBody();
-        }
-
-        clearAttempts(username);
-        captchaService.clearCaptcha(username);
-
-        return "Login realizado com sucesso";
-    }
 }
-
