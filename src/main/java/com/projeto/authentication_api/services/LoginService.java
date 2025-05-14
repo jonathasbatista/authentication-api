@@ -45,11 +45,22 @@ public class LoginService {
 
         UserModel user = validateUserAndPassword(username, password);
         validateIp(user, request.getRemoteAddr());
-        handle2FA(username, user.getEmail(), code);
 
+        if (!verificationCodes.containsKey(username)) {
+            String generatedCode = String.format("%06d", new Random().nextInt(999999));
+            verificationCodes.put(username, generatedCode);
+            emailService.sendVerificationCode(user.getEmail(), generatedCode);
+            return "Código de verificação enviado para o e-mail.";
+        }
+
+        if (code == null || !code.equals(verificationCodes.get(username))) {
+            throw new AuthenticationException("Código de verificação inválido ou expirado.");
+        }
+
+        verificationCodes.remove(username);
         clearAttempts(username);
         captchaService.clearCaptcha(username);
-        return "\nLogin realizado com sucesso";
+        return "Login realizado com sucesso";
     }
 
     private UserModel validateUserAndPassword(String username, String password) {

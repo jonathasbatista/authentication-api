@@ -714,3 +714,77 @@ java.lang.IllegalArgumentException: A senha deve ter no mínimo 6 caracteres.
 2025-05-14T14:21:20.127-03:00  INFO 3148 --- [authentication-api] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2025-05-14T14:21:20.130-03:00  INFO 3148 --- [authentication-api] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2025-05-14T14:21:20.133-03:00  INFO 3148 --- [authentication-api] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-05-14T15:02:40.721-03:00  INFO 19184 --- [authentication-api] [main] c.p.a.AuthenticationApiApplication       : Starting AuthenticationApiApplication using Java 22.0.2 with PID 19184 (D:\Users\Jonathas\Documentos\Projetos\authentication-api\target\classes started by Jonathan in D:\Users\Jonathas\Documentos\Projetos\authentication-api)
+2025-05-14T15:02:40.724-03:00  INFO 19184 --- [authentication-api] [main] c.p.a.AuthenticationApiApplication       : No active profile set, falling back to 1 default profile: "default"
+2025-05-14T15:02:41.374-03:00  INFO 19184 --- [authentication-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-14T15:02:41.424-03:00  INFO 19184 --- [authentication-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 41 ms. Found 1 JPA repository interface.
+2025-05-14T15:02:41.904-03:00  INFO 19184 --- [authentication-api] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-05-14T15:02:41.915-03:00  INFO 19184 --- [authentication-api] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-05-14T15:02:41.915-03:00  INFO 19184 --- [authentication-api] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.40]
+2025-05-14T15:02:41.953-03:00  INFO 19184 --- [authentication-api] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-05-14T15:02:41.953-03:00  INFO 19184 --- [authentication-api] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1193 ms
+2025-05-14T15:02:42.096-03:00  INFO 19184 --- [authentication-api] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-14T15:02:42.140-03:00  INFO 19184 --- [authentication-api] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.13.Final
+2025-05-14T15:02:42.165-03:00  INFO 19184 --- [authentication-api] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-14T15:02:42.373-03:00  INFO 19184 --- [authentication-api] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-14T15:02:42.396-03:00  INFO 19184 --- [authentication-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-14T15:02:42.563-03:00  INFO 19184 --- [authentication-api] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@74a85515
+2025-05-14T15:02:42.564-03:00  INFO 19184 --- [authentication-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-14T15:02:42.614-03:00  INFO 19184 --- [authentication-api] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-14T15:02:43.198-03:00  INFO 19184 --- [authentication-api] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-14T15:02:43.239-03:00  INFO 19184 --- [authentication-api] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-14T15:02:43.624-03:00  WARN 19184 --- [authentication-api] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-14T15:02:44.104-03:00  INFO 19184 --- [authentication-api] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-05-14T15:02:44.113-03:00  INFO 19184 --- [authentication-api] [main] c.p.a.AuthenticationApiApplication       : Started AuthenticationApiApplication in 3.82 seconds (process running for 4.795)
+2025-05-14T15:03:33.069-03:00  INFO 19184 --- [authentication-api] [http-nio-8080-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-05-14T15:03:33.070-03:00  INFO 19184 --- [authentication-api] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-05-14T15:03:33.071-03:00  INFO 19184 --- [authentication-api] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-05-14T15:05:29.608-03:00  INFO 19184 --- [authentication-api] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-14T15:05:29.612-03:00  INFO 19184 --- [authentication-api] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-05-14T15:05:29.614-03:00  INFO 19184 --- [authentication-api] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-14T15:05:29.616-03:00  INFO 19184 --- [authentication-api] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-05-14T15:05:29.619-03:00  INFO 19184 --- [authentication-api] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-05-14T16:10:29.160-03:00  INFO 10500 --- [authentication-api] [main] c.p.a.AuthenticationApiApplication       : Starting AuthenticationApiApplication using Java 22.0.2 with PID 10500 (D:\Users\Jonathas\Documentos\Projetos\authentication-api\target\classes started by Jonathan in D:\Users\Jonathas\Documentos\Projetos\authentication-api)
+2025-05-14T16:10:29.162-03:00  INFO 10500 --- [authentication-api] [main] c.p.a.AuthenticationApiApplication       : No active profile set, falling back to 1 default profile: "default"
+2025-05-14T16:10:29.784-03:00  INFO 10500 --- [authentication-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-14T16:10:29.833-03:00  INFO 10500 --- [authentication-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 41 ms. Found 1 JPA repository interface.
+2025-05-14T16:10:30.446-03:00  INFO 10500 --- [authentication-api] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-05-14T16:10:30.459-03:00  INFO 10500 --- [authentication-api] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-05-14T16:10:30.460-03:00  INFO 10500 --- [authentication-api] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.40]
+2025-05-14T16:10:30.506-03:00  INFO 10500 --- [authentication-api] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-05-14T16:10:30.506-03:00  INFO 10500 --- [authentication-api] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1299 ms
+2025-05-14T16:10:30.675-03:00  INFO 10500 --- [authentication-api] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-14T16:10:30.729-03:00  INFO 10500 --- [authentication-api] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.13.Final
+2025-05-14T16:10:30.762-03:00  INFO 10500 --- [authentication-api] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-14T16:10:30.983-03:00  INFO 10500 --- [authentication-api] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-14T16:10:31.006-03:00  INFO 10500 --- [authentication-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-14T16:10:31.159-03:00  INFO 10500 --- [authentication-api] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@274bae2c
+2025-05-14T16:10:31.160-03:00  INFO 10500 --- [authentication-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-14T16:10:31.209-03:00  INFO 10500 --- [authentication-api] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-14T16:10:31.848-03:00  INFO 10500 --- [authentication-api] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-14T16:10:31.885-03:00  INFO 10500 --- [authentication-api] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-14T16:10:32.262-03:00  WARN 10500 --- [authentication-api] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-14T16:10:32.746-03:00  INFO 10500 --- [authentication-api] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-05-14T16:10:32.753-03:00  INFO 10500 --- [authentication-api] [main] c.p.a.AuthenticationApiApplication       : Started AuthenticationApiApplication in 4.073 seconds (process running for 4.404)
+2025-05-14T16:12:39.166-03:00  INFO 10500 --- [authentication-api] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-05-14T16:12:39.167-03:00  INFO 10500 --- [authentication-api] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-05-14T16:12:39.168-03:00  INFO 10500 --- [authentication-api] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-05-14T16:13:49.798-03:00  INFO 10500 --- [authentication-api] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-14T16:13:49.801-03:00  INFO 10500 --- [authentication-api] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-05-14T16:13:49.804-03:00  INFO 10500 --- [authentication-api] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-14T16:13:49.805-03:00  INFO 10500 --- [authentication-api] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-05-14T16:13:49.812-03:00  INFO 10500 --- [authentication-api] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
