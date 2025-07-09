@@ -7,8 +7,10 @@ import com.projeto.authentication_api.models.UserModel;
 import com.projeto.authentication_api.repositories.UserRepository;
 import com.projeto.authentication_api.utils.SanitizerUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -28,7 +30,7 @@ public class LoginService {
         this.captchaService = captchaService;
     }
 
-    public String login(LoginDto loginDto, HttpServletRequest request) {
+    public UserModel login(LoginDto loginDto, HttpServletRequest request) {
         String username = SanitizerUtil.sanitizeUsername(loginDto.username());
         String password = SanitizerUtil.sanitizePassword(loginDto.password());
         String code = SanitizerUtil.sanitizeCode(loginDto.code());
@@ -46,11 +48,13 @@ public class LoginService {
         UserModel user = validateUserAndPassword(username, password);
         validateIp(user, request.getRemoteAddr());
 
+        // Se ainda não tiver enviado o código de verificação, envia e lança exceção
         if (!verificationCodes.containsKey(username)) {
             String generatedCode = String.format("%06d", new Random().nextInt(999999));
             verificationCodes.put(username, generatedCode);
             emailService.sendVerificationCode(user.getEmail(), generatedCode);
-            return "Código de verificação enviado para o e-mail.";
+            String message = "Código de verificação enviado para o e-mail.";
+            return null;
         }
 
         if (code == null || !code.equals(verificationCodes.get(username))) {
@@ -60,7 +64,7 @@ public class LoginService {
         verificationCodes.remove(username);
         clearAttempts(username);
         captchaService.clearCaptcha(username);
-        return "Login realizado com sucesso";
+        return user;
     }
 
     private UserModel validateUserAndPassword(String username, String password) {
